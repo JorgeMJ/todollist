@@ -8,7 +8,7 @@ class Node(object):
 		    next (points to the following node) '''
 		self.data = data
 		self.complete = complete
-		self.time = time.strftime('%b %d, %Y %I:%M%p %z')
+		self.time = time.strftime('%b %d, %Y %I:%M%p')
 		self.next = None
 
 	def __repr__(self):
@@ -22,21 +22,6 @@ class ToDoList(object):
 	def __init__(self):
 		''' Constructor: By default, a new list starts with an empty initial node (head). '''
 		self.head = Node()
-
-	def newTask(self, newtask):
-		''' Adds a new task to the end of to-do list. '''
-
-		#Pointer 'current_node' points to the beginning of the list
-		current_node = self.head
-		#Creates new node hoding the new task
-		new_task = Node(data=newtask)
-	
-		#Travels to the end of the list
-		while current_node.next != None:
-			current_node = current_node.next
-
-		#Add the new task to the end of the list
-		current_node.next = new_task
 	
 	def __repr__(self):
 		''' Returns an object representation of the class. '''
@@ -53,9 +38,48 @@ class ToDoList(object):
 		else:			
 			while current_node.next != None:
 				current_node = current_node.next
-				todo += f'\n{current_node.data}, {current_node.complete}, {current_node.time}'
-		
-		return todo
+				todo += f'\n - {current_node.data}, {current_node.complete}, {current_node.time}'
+						
+		return('\n-- Task  | Completed |   Add Date -- ' + todo)
+
+	def addTask(self, newtask):
+		''' Adds a new task to the end of to-do list. '''
+
+		#Pointer 'current_node' points to the beginning of the list
+		current_node = self.head
+		#Creates new node hoding the new task
+		new_task = Node(data=newtask)
+	
+		#Travels to the end of the list
+		while current_node.next != None:
+			current_node = current_node.next
+
+		#Add the new task to the end of the list
+		current_node.next = new_task
+
+
+	def checkTask(self, task):
+		''' Allows a given task to be checked as completed. '''
+		found_task = findTaskByDescription(task)
+		found_task.complete = True
+
+		print(f'***"{task}" has been marked as completed.***')
+
+
+	def findTaskByDescription(self, task):
+		''' Find a task in the list by description. '''
+		current_node = self.head
+
+		while current_node.next != None:
+			current_node = current_node.next
+			if current_node.data == task:
+				return current_node
+
+		if current_node.data != task and current_node.next == None:
+			return f'***"{task}" is not in the list.***'
+
+
+
 
 td = ToDoList()
 td.newTask("comprar")
@@ -63,4 +87,3 @@ td.newTask("correr")
 td.newTask("hacer cena")
 
 print(td)
-do
